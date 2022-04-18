@@ -1,16 +1,32 @@
 <template>
-  <div id="app">
-    asdasd
-  </div>
+	<div id="app">
+		<!-- <Navbar /> -->
+		<div class="page">
+			<router-view class="page-view" id="page-view" />
+		</div>
+	</div>
 </template>
 
 <script>
-import RepositoryFactory from "./repositories/RepositoryFactory";
 export default {
-  name: 'App',
-  async mounted() {
-    let response = await RepositoryFactory.album().top();
-    console.log("response", response)
-  },
+	name: "App",
+	components: {
+	},
+	mixins: [],
+	data() {
+		return {
+		};
+	},
+	async mounted() {
+	},
 }
 </script>
+
+<style lang="scss" scoped>
+.page {
+    .page__title {
+        font-size: 40px;
+        font-weight: bold;
+    }
+}
+</style>
