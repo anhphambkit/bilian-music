@@ -26,11 +26,12 @@
 							class="album-card__info album"
 						>
 							<div class="album__image-wrapper">
-								<b-img-lazy
+								<b-img
 									rounded
 									class="album__img"
 									:alt="albumName"
-									:src="albumImage"
+									@error="$_imageMixins_loadImageError"
+                            		:src="$_imageMixins_loadImageSrc(albumImage)"
 								/>
 							</div>
 							<div
@@ -49,11 +50,12 @@
 								class="album-card__info--value author-detail"
 							>
 								<div class="author__image-wrapper">
-									<b-img-lazy
+									<b-img
 										rounded="circle"
 										class="author__img"
 										:alt="artistName"
-										:src="artistImage"
+										@error="$_imageMixins_loadImageError"
+                            			:src="$_imageMixins_loadImageSrc(artistImage)"
 									/>
 								</div>
 								<div

@@ -10,7 +10,7 @@ export default () => ({
      * @param {*} range 
      * @returns 
      */
-    async top(limit = 10, offset = 0, range = "month") {
+    async top(limit = 10, offset = 0, range = "day") {
         try {
             const { data } = await axiosApi.get(ALBUM_APIS.TOP, {
                 params: {

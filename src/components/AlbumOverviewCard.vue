@@ -18,9 +18,10 @@
 					:to="`/album/${albumId}`"
 					class="album-overview-card__top"
 				>
-					<b-img-lazy
+					<b-img
 						rounded
-						:src="albumImage"
+						@error="$_imageMixins_loadImageError"
+						:src="$_imageMixins_loadImageSrc(albumImage)"
 						:alt="albumName"
 						class="album-overview-card__image"
 					/>

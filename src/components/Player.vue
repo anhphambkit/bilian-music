@@ -20,14 +20,13 @@
 			<slot>
 				<div class="player__over-view-wrapper" v-if="playingTrack">
 					<div class="player__image-wrapper">
-						<b-img-lazy
-							:src="
-								$_imageServerMixin_getUrlByType(
+						<b-img
+							@error="$_imageMixins_loadImageError"
+							:src="$_imageMixins_loadImageSrc($_imageServerMixin_getUrlByType(
 									IMAGE_SUPPORT_TYPES.TRACK,
 									playingTrack.albumId,
 									'300x300'
-								)
-							"
+								))"
 							alt=""
 							class="player__img"
 						/>
@@ -116,7 +115,8 @@
 						@ended="playNextTrack"
 					>
 						<source
-							:src="playingTrack.previewURL"
+							@error="$_imageMixins_loadImageError"
+							:src="$_imageMixins_loadImageSrc(playingTrack.previewURL)"
 							type="audio/mpeg"
 						/>
 						Your browser does not support the audio element.

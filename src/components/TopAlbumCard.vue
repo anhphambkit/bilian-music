@@ -47,12 +47,13 @@
 							class="top-album-card__link album-detail"
 						>
 							<div class="top-album-card__album--img-wrapper">
-								<b-img-lazy
+								<b-img
 									rounded
-									:src="albumImage"
+									:src="$_imageMixins_loadImageSrc('https://iframe-stg-clients.belive.sg/show/cover_image/')"
+									@error="$_imageMixins_loadImageError"
 									:alt="albumName"
 									class="top-album-card__album--img"
-								/>
+								></b-img>
 							</div>
 							<div
 								class="top-album-card__album--name"
@@ -75,9 +76,10 @@
 										top-album-card__author-info--img-wrapper
 									"
 								>
-									<b-img-lazy
+									<b-img
 										rounded="circle"
-										:src="artistImage"
+										@error="$_imageMixins_loadImageError"
+										:src="$_imageMixins_loadImageSrc(artistImage)"
 										:alt="artistName"
 										class="top-album-card__author-info--img"
 									/>

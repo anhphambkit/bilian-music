@@ -8,15 +8,14 @@
 				</div>
 				<div class="artist__overview" v-if="artist">
 					<div class="artist__image-wrapper">
-						<b-img-lazy
+						<b-img
 							rounded="circle"
-							:src="
-								$_imageServerMixin_getUrlByType(
-									IMAGE_SUPPORT_TYPES.ARTIST,
-									id,
-									'200x200'
-								)
-							"
+							@error="$_imageMixins_loadImageError"
+							:src="$_imageMixins_loadImageSrc($_imageServerMixin_getUrlByType(
+								IMAGE_SUPPORT_TYPES.ARTIST,
+								id,
+								'200x200'
+							))"
 							class="artist__image"
 							:alt="artist.name"
 						/>

@@ -23,16 +23,15 @@
 					>
 						<div class="album__content">
 							<div class="album__info">
-								<b-img-lazy
+								<b-img
 									thumbnail
 									rounded
-									:src="
-										$_imageServerMixin_getUrlByType(
-											IMAGE_SUPPORT_TYPES.ALBUM,
-											album.id,
-											'200x200'
-										)
-									"
+									@error="$_imageMixins_loadImageError"
+									:src="$_imageMixins_loadImageSrc($_imageServerMixin_getUrlByType(
+										IMAGE_SUPPORT_TYPES.ALBUM,
+										album.id,
+										'200x200'
+									))"
 									class="album__image"
 									:alt="album.name"
 								/>

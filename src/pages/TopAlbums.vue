@@ -2,7 +2,16 @@
 	<b-overlay :show="loading" rounded="sm">
 		<b-container fluid class="page page__home home">
 			<b-container class="p-0">
-				<h1 class="page__title">TOP 20 ALBUMS</h1>
+				<div class="page__filter-wrapper">
+					<h1 class="page__title">TOP 20 ALBUMS / </h1>
+					<b-form-select
+						v-model="filterRange"
+						:options="ranges"
+						class="page__select"
+						value-field="value"
+						text-field="name"
+					></b-form-select>
+				</div>
 				<b-row>
 					<b-col
 						class="col-lg-4 col-md-6 col-sm-12 mb-4"
@@ -32,7 +41,7 @@
 								$_imageServerMixin_getUrlByType(
 									IMAGE_SUPPORT_TYPES.ARTIST,
 									album.contributingArtists.primaryArtist,
-									'70x47'
+									'70x70'
 								)
 							"
 							:artistName="album.artistName"
@@ -68,7 +77,7 @@
 								$_imageServerMixin_getUrlByType(
 									IMAGE_SUPPORT_TYPES.ARTIST,
 									album.contributingArtists.primaryArtist,
-									'70x47'
+									'70x70'
 								)
 							"
 							:artistName="album.artistName"
@@ -98,7 +107,20 @@ export default {
 			topAlbums: [],
 			limit: 20,
 			loading: true,
+			filterRange: 'day',
+			ranges: [
+				{ value: 'day', name: 'Day' },
+				{ value: 'week', name: 'Week' },
+				{ value: 'month', name: 'Month' },
+				{ value: 'year', name: 'Year' },
+				{ value: 'life', name: 'Life' },
+			]
 		};
+	},
+	watch: {
+		async filterRange() {
+			await this.fetchTopAlbum();
+		}
 	},
 	computed: {
 		top3Albums() {
@@ -114,10 +136,27 @@ export default {
 	methods: {
 		async fetchTopAlbum() {
 			this.loading = true;
-			let response = await RepositoryFactory.album().top(this.limit);
+			let response = await RepositoryFactory.album().top(this.limit, 0, this.filterRange);
 			this.topAlbums = response.albums;
 			this.loading = false;
 		},
 	},
 };
 </script>
+<style lang="scss" scoped>
+.page {
+	&__filter-wrapper {
+		display: flex;
+		flex-wrap: wrap;
+		margin-bottom: 40px;
+	}
+	&__title {
+		margin-bottom: 0;
+		margin-right: 10px;
+	}
+	&__select {
+		width: 100%;
+		max-width: 200px;
+	}
+}
+</style>

@@ -18,7 +18,8 @@ import {
 	BSkeletonWrapper,
 	BSkeleton,
 	BSkeletonImg,
-	BOverlay
+	BOverlay,
+	BFormSelect
 } from "bootstrap-vue";
 
 Vue.component("b-container", BContainer);
@@ -35,4 +36,5 @@ Vue.component("b-skeleton-wrapper", BSkeletonWrapper);
 Vue.component("b-skeleton", BSkeleton);
 Vue.component("b-skeleton-img", BSkeletonImg);
 Vue.component("b-overlay", BOverlay);
+Vue.component("b-form-select", BFormSelect);
 Vue.use(TooltipPlugin);
