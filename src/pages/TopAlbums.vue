@@ -9,14 +9,16 @@
 					<TopAlbumCard
 						:order="index + 1"
 						:discCount="album.discCount"
-						:trackCount="album.discCount"
+						:trackCount="album.trackCount"
 						:released="$_momentMixins_formatDate(album.originallyReleased)"
+						:albumId="album.id"
 						:albumImage="$_imageServerMixin_getUrlByType(
 							IMAGE_SUPPORT_TYPES.ALBUM,
 							album.id,
 							'200x200'
 						)"
 						:albumName="album.name"
+						:artistId="album.contributingArtists.primaryArtist"
 						:artistImage="$_imageServerMixin_getUrlByType(
 							IMAGE_SUPPORT_TYPES.ARTIST,
 							album.contributingArtists.primaryArtist,
@@ -31,13 +33,14 @@
 					<AlbumCard
 						:order="index + 4"
 						:discCount="album.discCount"
-						:trackCount="album.discCount"
+						:trackCount="album.trackCount"
 						:released="$_momentMixins_formatDate(album.originallyReleased)"
 						:albumImage="$_imageServerMixin_getUrlByType(
 							IMAGE_SUPPORT_TYPES.ALBUM,
 							album.id,
 							'200x200'
 						)"
+						:albumId="album.id"
 						:albumName="album.name"
 						:artistImage="$_imageServerMixin_getUrlByType(
 							IMAGE_SUPPORT_TYPES.ARTIST,
@@ -45,6 +48,7 @@
 							'70x47'
 						)"
 						:artistName="album.artistName"
+						:artistId="album.contributingArtists.primaryArtist"
 					/>
 				</b-col>
 			</b-row>
@@ -58,7 +62,7 @@ import MomentMixins from "@/mixins/MomentMixins";
 import TopAlbumCard from "@/components/TopAlbumCard";
 import AlbumCard from "@/components/AlbumCard";
 export default {
-	name: "Home",
+	name: "TopAlbums",
 	components: {
 		TopAlbumCard,
 		AlbumCard
@@ -67,6 +71,7 @@ export default {
 	data() {
 		return {
 			topAlbums: [],
+			limit: 20
 		};
 	},
 	computed: {
@@ -82,7 +87,7 @@ export default {
 	},
 	methods: {
 		async fetchTopAlbum() {
-			let response = await RepositoryFactory.album().top(20);
+			let response = await RepositoryFactory.album().top(this.limit);
 			this.topAlbums = response.albums;
 		}
 	},

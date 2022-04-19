@@ -24,5 +24,37 @@ export default () => ({
         catch (error) {
             console.log("Error API", error)
         }
-	},
+    },
+    
+    /**
+     * Get detail of album by albumId
+     * @param {*} id 
+     * @returns 
+     */
+     async detail(id) {
+        let apiUrl = ALBUM_APIS.DETAIL.replace("{id}", id)
+        try {
+            const { data } = await axiosApi.get(apiUrl);
+            return data
+        }
+        catch (error) {
+            console.log("Error API", error)
+        }
+    },
+
+    /**
+     * Get the tracks of album by albumId
+     * @param {*} id 
+     * @returns 
+     */
+    async tracks(id) {
+        let apiUrl = ALBUM_APIS.TRACKS.replace("{id}", id)
+        try {
+            const { data } = await axiosApi.get(apiUrl);
+            return data
+        }
+        catch (error) {
+            console.log("Error API", error)
+        }
+    }
 });

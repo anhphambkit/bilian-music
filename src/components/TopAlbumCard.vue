@@ -24,32 +24,52 @@
 			</div>
 			<div class="top-album-card__main">
 				<div class="top-album-card__album">
-					<div class="top-album-card__album--img-wrapper">
-						<b-img-lazy
-							rounded
-							:src="albumImage"
-							:alt="albumName"
-							class="top-album-card__album--img"
-						/>
-					</div>
-					<div class="top-album-card__album--name" v-b-tooltip.hover :title="albumName">
-						{{ albumName }}
-					</div>
+					<router-link
+						:to="`/album/${albumId}`"
+						class="top-album-card__link album-detail"
+					>
+						<div class="top-album-card__album--img-wrapper">
+							<b-img-lazy
+								rounded
+								:src="albumImage"
+								:alt="albumName"
+								class="top-album-card__album--img"
+							/>
+						</div>
+						<div
+							class="top-album-card__album--name"
+							v-b-tooltip.hover
+							:title="albumName"
+						>
+							{{ albumName }}
+						</div>
+					</router-link>
 				</div>
 				<div class="top-album-card__author">
 					<div class="top-album-card__author-title">Artist</div>
 					<div class="top-album-card__author-info">
-						<div class="top-album-card__author-info--img-wrapper">
-							<b-img-lazy
-								rounded="circle"
-								:src="artistImage"
-								:alt="artistName"
-								class="top-album-card__author-info--img"
-							/>
-						</div>
-						<div class="top-album-card__author-info--name" v-b-tooltip.hover :title="artistName">
-							{{ artistName }}
-						</div>
+						<router-link
+							:to="`/artist/${artistId}`"
+							class="top-album-card__link author-detail"
+						>
+							<div
+								class="top-album-card__author-info--img-wrapper"
+							>
+								<b-img-lazy
+									rounded="circle"
+									:src="artistImage"
+									:alt="artistName"
+									class="top-album-card__author-info--img"
+								/>
+							</div>
+							<div
+								class="top-album-card__author-info--name"
+								v-b-tooltip.hover
+								:title="artistName"
+							>
+								{{ artistName }}
+							</div>
+						</router-link>
 					</div>
 				</div>
 			</div>
@@ -76,6 +96,10 @@ export default {
 			type: String,
 			required: true,
 		},
+		albumId: {
+			type: String,
+			required: true,
+		},
 		albumImage: {
 			type: String,
 			required: true,
@@ -92,6 +116,10 @@ export default {
 			type: String,
 			required: true,
 		},
+		artistId: {
+			type: String,
+			required: true,
+		},
 	},
 };
 </script>
@@ -100,10 +128,10 @@ export default {
 	display: flex;
 	justify-content: center;
 	color: white;
-    border-radius: 5px;
+	border-radius: 5px;
 	transition: all 0.3s ease;
 	&:hover {
-		box-shadow: 0px 2px 10px rgb(0,0,0);
+		box-shadow: 0px 2px 10px rgb(0, 0, 0);
 	}
 	&__sub {
 		background-color: #191919;
@@ -123,6 +151,15 @@ export default {
 		flex-direction: column;
 		border-top-right-radius: 5px;
 		border-bottom-right-radius: 5px;
+	}
+	&__link {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		&.author-detail {
+			flex-direction: row;
+		}
 	}
 	&__info {
 		width: 100%;
@@ -175,7 +212,7 @@ export default {
 			height: 100px;
 			@media screen and (max-width: 992px) {
 				width: 60px;
-			height: 60px;
+				height: 60px;
 			}
 		}
 		&--name {
@@ -236,6 +273,7 @@ export default {
 		&--name {
 			font-size: 12px;
 			cursor: pointer;
+			color: white;
 			@media screen and (max-width: 992px) {
 				font-size: 10px;
 			}

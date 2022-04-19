@@ -28,5 +28,13 @@ export default {
         font-size: 40px;
         font-weight: bold;
     }
+	&::v-deep {
+		a {
+			color: #f57d00;
+			&:hover {
+				text-decoration: none;
+			}
+		}
+	}
 }
 </style>

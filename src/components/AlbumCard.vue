@@ -8,7 +8,10 @@
 			</div>
 			<div class="album-card__info-wrapper">
 				<div class="album-card__main">
-					<div class="album-card__info album">
+					<router-link
+						:to="`/album/${albumId}`"
+						class="album-card__info album"
+					>
 						<div class="album__image-wrapper">
 							<b-img-lazy
 								rounded
@@ -17,14 +20,21 @@
 								:src="albumImage"
 							/>
 						</div>
-						<div class="album__name" v-b-tooltip.hover :title="albumName">
+						<div
+							class="album__name"
+							v-b-tooltip.hover
+							:title="albumName"
+						>
 							{{ albumName }}
 						</div>
-					</div>
+					</router-link>
 				</div>
 				<div class="album-card__sub">
 					<div class="album-card__info author">
-						<div class="album-card__info--value">
+						<router-link
+							:to="`/artist/${artistId}`"
+							class="album-card__info--value author-detail"
+						>
 							<div class="author__image-wrapper">
 								<b-img-lazy
 									rounded="circle"
@@ -33,10 +43,14 @@
 									:src="artistImage"
 								/>
 							</div>
-							<div class="author__name" v-b-tooltip.hover :title="artistName">
+							<div
+								class="author__name"
+								v-b-tooltip.hover
+								:title="artistName"
+							>
 								{{ artistName }}
 							</div>
-						</div>
+						</router-link>
 						<div class="album-card__info--name">Artist</div>
 					</div>
 					<div class="album-card__info total-tracks">
@@ -82,6 +96,10 @@ export default {
 			type: String,
 			required: true,
 		},
+		albumId: {
+			type: String,
+			required: true,
+		},
 		albumImage: {
 			type: String,
 			required: true,
@@ -95,6 +113,10 @@ export default {
 			required: true,
 		},
 		artistName: {
+			type: String,
+			required: true,
+		},
+		artistId: {
 			type: String,
 			required: true,
 		},
@@ -211,6 +233,7 @@ export default {
 			.album-card__info--value {
 				justify-content: flex-start;
 				width: 100%;
+				color: white;
 			}
 			.author__image-wrapper {
 				margin-right: 10px;

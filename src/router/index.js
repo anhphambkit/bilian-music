@@ -1,13 +1,19 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "@/pages/Home";
+import TopAlbums from "@/pages/TopAlbums";
+import AlbumDetail from "@/pages/AlbumDetail";
 
 Vue.use(VueRouter);
 export const routes = [
     {
         path: "/",
-        name: "Home",
-        component: Home
+        name: "TopAlbums",
+        component: TopAlbums
+    },
+    {
+        path: "/album/:id",
+        name: "AlbumDetail",
+        component: AlbumDetail
     },
 ];
 

@@ -9,7 +9,11 @@ import {
 	BImgLazy,
 	BRow,
 	BCol,
-	TooltipPlugin
+	BBadge,
+	TooltipPlugin,
+	BIconMusicNoteList,
+	BIconSkipStartFill,
+	BIconSkipEndFill
 } from "bootstrap-vue";
 
 Vue.component("b-container", BContainer);
@@ -17,4 +21,8 @@ Vue.component("b-img", BImg);
 Vue.component("b-img-lazy", BImgLazy);
 Vue.component("b-row", BRow);
 Vue.component("b-col", BCol);
+Vue.component("b-badge", BBadge);
+Vue.component("b-icon-music-note-list", BIconMusicNoteList);
+Vue.component("b-icon-skip-start-fill", BIconSkipStartFill);
+Vue.component("b-icon-skip-end-fill", BIconSkipEndFill);
 Vue.use(TooltipPlugin);
