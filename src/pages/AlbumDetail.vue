@@ -6,7 +6,7 @@
 					<router-link :to="'/'"> Home </router-link>
 					- Album Detail
 				</div>
-				<b-row class="album__wrapper" v-if="album">
+				<b-row class="album__wrapper" v-if="albumDetail">
 					<b-col
 						cols="12"
 						class="
@@ -15,7 +15,7 @@
 							mb-4
 						"
 					>
-						<Player :playlists="tracks" />
+						<Player :playlists="albumTracks" />
 					</b-col>
 					<b-col
 						cols="12"
@@ -29,27 +29,27 @@
 									@error="$_imageMixins_loadImageError"
 									:src="$_imageMixins_loadImageSrc($_imageServerMixin_getUrlByType(
 										IMAGE_SUPPORT_TYPES.ALBUM,
-										album.id,
+										albumDetail.id,
 										'200x200'
 									))"
 									class="album__image"
-									:alt="album.name"
+									:alt="albumDetail.name"
 								/>
 								<div
 									class="album__name"
 									v-b-tooltip.hover
-									:title="album.name"
+									:title="albumDetail.name"
 								>
-									{{ album.name }}
+									{{ albumDetail.name }}
 								</div>
 							</div>
 							<div class="album__info">
 								<div class="album__info--key">Artist:</div>
 								<router-link
-									:to="`/artist/${album.contributingArtists.primaryArtist}`"
+									:to="`/artist/${albumDetail.contributingArtists.primaryArtist}`"
 									class="album__info--name artist"
 								>
-									{{ album.artistName }}
+									{{ albumDetail.artistName }}
 								</router-link>
 							</div>
 							<div class="album__info">
@@ -59,7 +59,7 @@
 										:variant="
 											VARIANTS[index % VARIANTS.length]
 										"
-										v-for="(genre, index) in genres"
+										v-for="(genre, index) in albumGenres"
 										:key="index"
 										class="mr-2"
 									>
@@ -72,13 +72,13 @@
 									Total tracks:
 								</div>
 								<div class="album__info--name total-tracks">
-									{{ album.trackCount }}
+									{{ albumDetail.trackCount }}
 								</div>
 							</div>
 							<div class="album__info">
 								<div class="album__info--key">Total discs:</div>
 								<div class="album__info--name total-discs">
-									{{ album.discCount }}
+									{{ albumDetail.discCount }}
 								</div>
 							</div>
 							<div class="album__info">
@@ -86,7 +86,7 @@
 								<div class="album__info--name released">
 									{{
 										$_momentMixins_formatDate(
-											album.originallyReleased
+											albumDetail.originallyReleased
 										)
 									}}
 								</div>
@@ -100,10 +100,11 @@
 </template>
 
 <script>
-import RepositoryFactory from "@/repositories/RepositoryFactory";
+import { mapActions, mapGetters } from 'vuex';
 import ImageServerMixin from "@/mixins/ImageServerMixin";
 import MomentMixins from "@/mixins/MomentMixins";
 import Player from "@/components/Player";
+import { VARIANTS } from"@/configs/Settings"
 export default {
 	name: "AlbumDetail",
 	components: {
@@ -113,19 +114,7 @@ export default {
 	data() {
 		return {
 			id: this.$route.params.id,
-			album: null,
-			tracks: [],
-			genres: null,
-			VARIANTS: [
-				"success",
-				"primary",
-				"secondary",
-				"danger",
-				"warning",
-				"info",
-				"light",
-				"dark",
-			],
+			VARIANTS,
 			loading: true,
 		};
 	},
@@ -133,34 +122,42 @@ export default {
 		await this.fetchAlbumDetail();
 		await this.fetchTracksOfAlbum();
 	},
+	computed: {
+		...mapGetters(["albumDetail", "albumTracks", "albumGenres"])
+	},
 	methods: {
+		...mapActions({
+			getAlbumDetail: "getAlbumDetail",
+			getTracksOfAlbum: "getTracksOfAlbum",
+			getGenreDetail: "getGenreDetail"
+		}),
+
 		/**
 		 * fetch album detail by albumId
 		 */
 		async fetchAlbumDetail() {
 			this.loading = true;
-			let response = await RepositoryFactory.album().detail(this.id);
-			this.album = response.albums[0];
+			await this.getAlbumDetail(this.id);
 			await this.fetchGenreDetail();
 		},
+		
 		/**
 		 * fetch tracks by albumId
 		 */
 		async fetchTracksOfAlbum() {
 			this.loading = true;
-			let response = await RepositoryFactory.album().tracks(this.id);
-			this.tracks = response.tracks;
+			await this.getTracksOfAlbum(this.id);
 			this.loading = false;
 		},
+
 		/**
 		 * get detail genres of album
 		 */
 		async fetchGenreDetail() {
 			this.loading = true;
-			let response = await RepositoryFactory.genre().detail(
-				this.album.links.genres.ids.join(",")
+			await this.getGenreDetail(
+				this.albumDetail.links.genres.ids.join(",")
 			);
-			this.genres = response.genres;
 			this.loading = false;
 		},
 	},

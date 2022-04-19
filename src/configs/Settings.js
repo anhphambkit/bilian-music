@@ -12,3 +12,14 @@ export const DATE_TIME_CONFIGS = {
     TIMEZONE: "",
     LOCALE: ""
 }
+
+export const VARIANTS = [
+    "success",
+    "primary",
+    "secondary",
+    "danger",
+    "warning",
+    "info",
+    "light",
+    "dark",
+]

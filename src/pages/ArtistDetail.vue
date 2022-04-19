@@ -6,7 +6,7 @@
 					<router-link :to="'/'"> Home </router-link>
 					- Artist Detail
 				</div>
-				<div class="artist__overview" v-if="artist">
+				<div class="artist__overview" v-if="artistDetail">
 					<div class="artist__image-wrapper">
 						<b-img
 							rounded="circle"
@@ -17,15 +17,15 @@
 								'200x200'
 							))"
 							class="artist__image"
-							:alt="artist.name"
+							:alt="artistDetail.name"
 						/>
 					</div>
 					<div class="artist__info">
-						<div class="artist__info-name">{{ artist.name }}</div>
+						<div class="artist__info-name">{{ artistDetail.name }}</div>
 						<div class="artist__info-genre mb-4">
 							<b-badge
 								:variant="VARIANTS[index % VARIANTS.length]"
-								v-for="(genre, index) in genres"
+								v-for="(genre, index) in artistGenres"
 								:key="index"
 								class="mr-2"
 							>
@@ -35,7 +35,7 @@
 						<div class="artist__info-bio">
 							<div
 								class="artist__info-bio--item"
-								v-for="(bio, index) in artist.bios"
+								v-for="(bio, index) in artistDetail.bios"
 								:key="index"
 							>
 								<div class="artist__info-bio--title">
@@ -64,12 +64,12 @@
 						</div>
 					</div>
 				</div>
-				<div class="artist__section tops">
+				<div class="artist__section tops" v-if="artistTopAlbums.length">
 					<div class="artist__section--title">Top Albums</div>
 					<b-row class="artist__section--list">
 						<div
 							class="col-lg-3 col-sm-6 col-xs-12 artist__item"
-							v-for="(album, index) in topAlbums"
+							v-for="(album, index) in artistTopAlbums"
 							:key="index"
 						>
 							<AlbumOverviewCard
@@ -93,7 +93,7 @@
 						</div>
 					</b-row>
 				</div>
-				<div class="artist__section releases">
+				<div class="artist__section releases" v-if="newAlbums.length">
 					<div class="artist__section--title">New Releases</div>
 					<b-row class="artist__section--list">
 						<div
@@ -128,10 +128,11 @@
 </template>
 
 <script>
-import RepositoryFactory from "@/repositories/RepositoryFactory";
+import { mapActions, mapGetters } from 'vuex';
 import ImageServerMixin from "@/mixins/ImageServerMixin";
 import MomentMixins from "@/mixins/MomentMixins";
 import AlbumOverviewCard from "@/components/AlbumOverviewCard";
+import { VARIANTS } from"@/configs/Settings"
 export default {
 	name: "ArtistDetail",
 	components: {
@@ -141,22 +142,12 @@ export default {
 	data() {
 		return {
 			id: this.$route.params.id,
-			artist: null,
-			topAlbums: [],
-			newAlbums: [],
-			genres: null,
-			VARIANTS: [
-				"success",
-				"primary",
-				"secondary",
-				"danger",
-				"warning",
-				"info",
-				"light",
-				"dark",
-			],
+			VARIANTS,
 			loading: true,
 		};
+	},
+	computed: {
+		...mapGetters(["artistDetail", "artistTopAlbums", "newAlbums", "artistGenres"])
 	},
 	async mounted() {
 		await this.fetchArtistDetail();
@@ -164,13 +155,19 @@ export default {
 		await this.fetchNewReleases();
 	},
 	methods: {
+		...mapActions({
+			getTopAlbums: "getArtistTopAlbums",
+			getArtistDetail: "getArtistDetail",
+			getNewAlbums: "getNewAlbums",
+			getArtistGenres: "getArtistGenres",
+		}),
+		
 		/**
 		 * fetch artist detail by artistId
 		 */
 		async fetchArtistDetail() {
 			this.loading = true;
-			let response = await RepositoryFactory.artist().detail(this.id);
-			this.artist = response.artists[0];
+			await this.getArtistDetail(this.id);
 			await this.fetchGenreDetail();
 		},
 
@@ -179,8 +176,7 @@ export default {
 		 */
 		async fetchTopAlbums() {
 			this.loading = true;
-			let response = await RepositoryFactory.artist().topAlbums(this.id);
-			this.topAlbums = response.albums;
+			await this.getTopAlbums(this.id);
 			this.loading = false;
 		},
 
@@ -189,10 +185,7 @@ export default {
 		 */
 		async fetchNewReleases() {
 			this.loading = true;
-			let response = await RepositoryFactory.artist().newReleases(
-				this.id
-			);
-			this.newAlbums = response.albums;
+			await this.getNewAlbums(this.id);
 			this.loading = false;
 		},
 
@@ -201,10 +194,9 @@ export default {
 		 */
 		async fetchGenreDetail() {
 			this.loading = true;
-			let response = await RepositoryFactory.genre().detail(
-				this.artist.links.genres.ids.join(",")
+			await this.getArtistGenres(
+				this.artistDetail.links.genres.ids.join(",")
 			);
-			this.genres = response.genres;
 			this.loading = false;
 		},
 	},

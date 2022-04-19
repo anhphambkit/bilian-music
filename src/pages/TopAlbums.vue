@@ -90,7 +90,7 @@
 	</b-overlay>
 </template>
 <script>
-import RepositoryFactory from "@/repositories/RepositoryFactory";
+import { mapActions, mapGetters } from 'vuex';
 import ImageServerMixin from "@/mixins/ImageServerMixin";
 import MomentMixins from "@/mixins/MomentMixins";
 import TopAlbumCard from "@/components/TopAlbumCard";
@@ -104,7 +104,6 @@ export default {
 	mixins: [ImageServerMixin, MomentMixins],
 	data() {
 		return {
-			topAlbums: [],
 			limit: 20,
 			loading: true,
 			filterRange: 'day',
@@ -123,6 +122,7 @@ export default {
 		}
 	},
 	computed: {
+		...mapGetters(["topAlbums"]),
 		top3Albums() {
 			return this.topAlbums.slice(0, 3);
 		},
@@ -134,11 +134,17 @@ export default {
 		await this.fetchTopAlbum();
 	},
 	methods: {
+		...mapActions({
+			getTopAlbums: "getTopAlbums"
+		}),
 		async fetchTopAlbum() {
-			this.loading = true;
-			let response = await RepositoryFactory.album().top(this.limit, 0, this.filterRange);
-			this.topAlbums = response.albums;
-			this.loading = false;
+			this.loading = true
+			await this.getTopAlbums({
+				limit: this.limit,
+				offset: 0, 
+				filterRange: this.filterRange
+			})
+			this.loading = false
 		},
 	},
 };
