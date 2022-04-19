@@ -13,7 +13,12 @@ import {
 	TooltipPlugin,
 	BIconMusicNoteList,
 	BIconSkipStartFill,
-	BIconSkipEndFill
+	BIconSkipEndFill,
+	BIconDiscFill,
+	BSkeletonWrapper,
+	BSkeleton,
+	BSkeletonImg,
+	BOverlay
 } from "bootstrap-vue";
 
 Vue.component("b-container", BContainer);
@@ -25,4 +30,9 @@ Vue.component("b-badge", BBadge);
 Vue.component("b-icon-music-note-list", BIconMusicNoteList);
 Vue.component("b-icon-skip-start-fill", BIconSkipStartFill);
 Vue.component("b-icon-skip-end-fill", BIconSkipEndFill);
+Vue.component("b-icon-disc-fill", BIconDiscFill);
+Vue.component("b-skeleton-wrapper", BSkeletonWrapper);
+Vue.component("b-skeleton", BSkeleton);
+Vue.component("b-skeleton-img", BSkeletonImg);
+Vue.component("b-overlay", BOverlay);
 Vue.use(TooltipPlugin);

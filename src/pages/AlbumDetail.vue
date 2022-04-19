@@ -1,93 +1,103 @@
 <template>
-	<b-container fluid class="album page__album">
-		<b-container class="p-0">
-			<div class="album__nav">
-				<router-link :to="'/'"> Home </router-link>
-				- Album Detail
-			</div>
-			<b-row class="album__wrapper" v-if="album">
-				<b-col
-					cols="12"
-					class="
-						album__player-wrapper
-						col-lg-5 col-md-12 col-sm-12
-						mb-4
-					"
-				>
-					<Player :playlists="tracks" />
-				</b-col>
-				<b-col
-					cols="12"
-					class="album__info-wrapper col-lg-7 col-md-12 col-sm-12"
-				>
-					<div class="album__content">
-						<div class="album__info">
-							<b-img-lazy
-								thumbnail
-								rounded
-								:src="
-									$_imageServerMixin_getUrlByType(
-										IMAGE_SUPPORT_TYPES.ALBUM,
-										album.id,
-										'200x200'
-									)
-								"
-								class="album__image"
-								:alt="album.name"
-							/>
-							<div
-								class="album__name"
-								v-b-tooltip.hover
-								:title="album.name"
-							>
-								{{ album.name }}
-							</div>
-						</div>
-						<div class="album__info">
-							<div class="album__info--key">Artist:</div>
-							<div class="album__info--name artist">
-								{{ album.artistName }}
-							</div>
-						</div>
-						<div class="album__info">
-							<div class="album__info--key">Genres:</div>
-							<div class="album__info--name genre">
-								<b-badge
-									:variant="VARIANTS[index % VARIANTS.length]"
-									v-for="(genre, index) in genres"
-									:key="index"
+	<b-overlay :show="loading" rounded="sm">
+		<b-container fluid class="page album page__album">
+			<b-container class="p-0">
+				<div class="album__nav">
+					<router-link :to="'/'"> Home </router-link>
+					- Album Detail
+				</div>
+				<b-row class="album__wrapper" v-if="album">
+					<b-col
+						cols="12"
+						class="
+							album__player-wrapper
+							col-lg-5 col-md-12 col-sm-12
+							mb-4
+						"
+					>
+						<Player :playlists="tracks" />
+					</b-col>
+					<b-col
+						cols="12"
+						class="album__info-wrapper col-lg-7 col-md-12 col-sm-12"
+					>
+						<div class="album__content">
+							<div class="album__info">
+								<b-img-lazy
+									thumbnail
+									rounded
+									:src="
+										$_imageServerMixin_getUrlByType(
+											IMAGE_SUPPORT_TYPES.ALBUM,
+											album.id,
+											'200x200'
+										)
+									"
+									class="album__image"
+									:alt="album.name"
+								/>
+								<div
+									class="album__name"
+									v-b-tooltip.hover
+									:title="album.name"
 								>
-									{{ genre.name }}
-								</b-badge>
+									{{ album.name }}
+								</div>
+							</div>
+							<div class="album__info">
+								<div class="album__info--key">Artist:</div>
+								<router-link
+									:to="`/artist/${album.contributingArtists.primaryArtist}`"
+									class="album__info--name artist"
+								>
+									{{ album.artistName }}
+								</router-link>
+							</div>
+							<div class="album__info">
+								<div class="album__info--key">Genres:</div>
+								<div class="album__info--name genre">
+									<b-badge
+										:variant="
+											VARIANTS[index % VARIANTS.length]
+										"
+										v-for="(genre, index) in genres"
+										:key="index"
+										class="mr-2"
+									>
+										{{ genre.name }}
+									</b-badge>
+								</div>
+							</div>
+							<div class="album__info">
+								<div class="album__info--key">
+									Total tracks:
+								</div>
+								<div class="album__info--name total-tracks">
+									{{ album.trackCount }}
+								</div>
+							</div>
+							<div class="album__info">
+								<div class="album__info--key">Total discs:</div>
+								<div class="album__info--name total-discs">
+									{{ album.discCount }}
+								</div>
+							</div>
+							<div class="album__info">
+								<div class="album__info--key">Released:</div>
+								<div class="album__info--name released">
+									{{
+										$_momentMixins_formatDate(
+											album.originallyReleased
+										)
+									}}
+								</div>
 							</div>
 						</div>
-						<div class="album__info">
-							<div class="album__info--key">Total tracks:</div>
-							<div class="album__info--name total-tracks">
-								{{ album.trackCount }}
-							</div>
-						</div>
-						<div class="album__info">
-							<div class="album__info--key">Total discs:</div>
-							<div class="album__info--name total-discs">
-								{{ album.discCount }}
-							</div>
-						</div>
-						<div class="album__info">
-							<div class="album__info--key">Released:</div>
-							<div class="album__info--name released">
-								{{
-									$_momentMixins_formatDate(
-										album.originallyReleased
-									)
-								}}
-							</div>
-						</div>
-					</div>
-				</b-col>
-			</b-row>
+					</b-col>
+				</b-row>
+			</b-container>
 		</b-container>
-	</b-container>
+	</b-overlay>
 </template>
 
 <script>
@@ -117,6 +127,7 @@ export default {
 				"light",
 				"dark",
 			],
+			loading: true,
 		};
 	},
 	async mounted() {
@@ -128,6 +139,7 @@ export default {
 		 * fetch album detail by albumId
 		 */
 		async fetchAlbumDetail() {
+			this.loading = true;
 			let response = await RepositoryFactory.album().detail(this.id);
 			this.album = response.albums[0];
 			await this.fetchGenreDetail();
@@ -136,17 +148,21 @@ export default {
 		 * fetch tracks by albumId
 		 */
 		async fetchTracksOfAlbum() {
+			this.loading = true;
 			let response = await RepositoryFactory.album().tracks(this.id);
 			this.tracks = response.tracks;
+			this.loading = false;
 		},
 		/**
 		 * get detail genres of album
 		 */
 		async fetchGenreDetail() {
+			this.loading = true;
 			let response = await RepositoryFactory.genre().detail(
 				this.album.links.genres.ids.join(",")
 			);
 			this.genres = response.genres;
+			this.loading = false;
 		},
 	},
 };
@@ -157,9 +173,8 @@ export default {
 	background-image: url("../assets/media/bg-detail.jpg");
 	background-repeat: no-repeat;
 	background-position: center;
-	    background-size: cover;
-	    padding: 15px 0;
-    min-height: 100vh;
+	background-size: cover;
+	min-height: 100vh;
 	color: white;
 	&__nav {
 		font-size: 30px;

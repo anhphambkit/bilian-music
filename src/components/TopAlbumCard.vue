@@ -1,84 +1,107 @@
 <template>
 	<div class="top-album-card">
-		<slot>
-			<div class="top-album-card__sub">
-				<div class="top-album-card__info order">#{{ order }}</div>
-				<div class="top-album-card__info">
-					<div class="top-album-card__info--name">Total tracks</div>
-					<div class="top-album-card__info--detail">
-						{{ trackCount }}
-					</div>
+		<b-skeleton-wrapper :loading="skeletonMixin_loading" class="skeleton-loading">
+			<template #loading>
+				<div class="skeleton-loading__partial skeleton-loading__sub top-album-card__sub">
+					<b-skeleton width="100%"></b-skeleton>
+					<b-skeleton width="100%"></b-skeleton>
+					<b-skeleton width="100%"></b-skeleton>
+					<b-skeleton width="100%"></b-skeleton>
 				</div>
-				<div class="top-album-card__info">
-					<div class="top-album-card__info--name">Total discs</div>
-					<div class="top-album-card__info--detail">
-						{{ discCount }}
-					</div>
+				<div class="skeleton-loading__partial skeleton-loading__main top-album-card__main">
+					<b-skeleton-img></b-skeleton-img>
+					<b-skeleton width="100%" class="mt-2"></b-skeleton>
+					<b-skeleton width="100%"></b-skeleton>
 				</div>
-				<div class="top-album-card__info">
-					<div class="top-album-card__info--name">Released</div>
-					<div class="top-album-card__info--detail date">
-						{{ released }}
-					</div>
-				</div>
-			</div>
-			<div class="top-album-card__main">
-				<div class="top-album-card__album">
-					<router-link
-						:to="`/album/${albumId}`"
-						class="top-album-card__link album-detail"
-					>
-						<div class="top-album-card__album--img-wrapper">
-							<b-img-lazy
-								rounded
-								:src="albumImage"
-								:alt="albumName"
-								class="top-album-card__album--img"
-							/>
+			</template>
+			<slot>
+				<div class="top-album-card__sub">
+					<div class="top-album-card__info order">#{{ order }}</div>
+					<div class="top-album-card__info">
+						<div class="top-album-card__info--name">
+							Total tracks
 						</div>
-						<div
-							class="top-album-card__album--name"
-							v-b-tooltip.hover
-							:title="albumName"
-						>
-							{{ albumName }}
+						<div class="top-album-card__info--detail">
+							{{ trackCount }}
 						</div>
-					</router-link>
+					</div>
+					<div class="top-album-card__info">
+						<div class="top-album-card__info--name">
+							Total discs
+						</div>
+						<div class="top-album-card__info--detail">
+							{{ discCount }}
+						</div>
+					</div>
+					<div class="top-album-card__info">
+						<div class="top-album-card__info--name">Released</div>
+						<div class="top-album-card__info--detail date">
+							{{ released }}
+						</div>
+					</div>
 				</div>
-				<div class="top-album-card__author">
-					<div class="top-album-card__author-title">Artist</div>
-					<div class="top-album-card__author-info">
+				<div class="top-album-card__main">
+					<div class="top-album-card__album">
 						<router-link
-							:to="`/artist/${artistId}`"
-							class="top-album-card__link author-detail"
+							:to="`/album/${albumId}`"
+							class="top-album-card__link album-detail"
 						>
-							<div
-								class="top-album-card__author-info--img-wrapper"
-							>
+							<div class="top-album-card__album--img-wrapper">
 								<b-img-lazy
-									rounded="circle"
-									:src="artistImage"
-									:alt="artistName"
-									class="top-album-card__author-info--img"
+									rounded
+									:src="albumImage"
+									:alt="albumName"
+									class="top-album-card__album--img"
 								/>
 							</div>
 							<div
-								class="top-album-card__author-info--name"
+								class="top-album-card__album--name"
 								v-b-tooltip.hover
-								:title="artistName"
+								:title="albumName"
 							>
-								{{ artistName }}
+								{{ albumName }}
 							</div>
 						</router-link>
 					</div>
+					<div class="top-album-card__author">
+						<div class="top-album-card__author-title">Artist</div>
+						<div class="top-album-card__author-info">
+							<router-link
+								:to="`/artist/${artistId}`"
+								class="top-album-card__link author-detail"
+							>
+								<div
+									class="
+										top-album-card__author-info--img-wrapper
+									"
+								>
+									<b-img-lazy
+										rounded="circle"
+										:src="artistImage"
+										:alt="artistName"
+										class="top-album-card__author-info--img"
+									/>
+								</div>
+								<div
+									class="top-album-card__author-info--name"
+									v-b-tooltip.hover
+									:title="artistName"
+								>
+									{{ artistName }}
+								</div>
+							</router-link>
+						</div>
+					</div>
 				</div>
-			</div>
-		</slot>
+			</slot>
+		</b-skeleton-wrapper>
 	</div>
 </template>
 <script>
+import SkeletonMixin from "@/mixins/SkeletonMixin";
 export default {
 	name: "TopAlbumCard",
+	mixins: [SkeletonMixin],
 	props: {
 		order: {
 			type: Number,
@@ -120,7 +143,7 @@ export default {
 			type: String,
 			required: true,
 		},
-	},
+	}
 };
 </script>
 <style lang="scss" scoped>

@@ -1,0 +1,27 @@
+.skeleton-loading {
+    display: flex;
+    width: 100%;
+    padding: 5px 20px;
+    &__partial {
+        padding: 5px 10px;
+    }
+    &__sub {
+        width: 30%;
+    }
+    &__main {
+        width: 70%;
+    }
+    &__order {
+        width: 10%;
+    }
+    &__info {
+        width: 90%;
+    }
+    &.album-overview-card-loading {
+        flex-direction: column;
+        background-color: #262626;
+    }
+    &.player-loading {
+        flex-direction: column;
+    }
+}

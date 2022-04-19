@@ -7,5 +7,11 @@ export const APIs = {
 
 	GENRE: {
 		DETAIL: `/genres/{ids}`,
+	},
+
+	ARTIST: {
+		DETAIL: `/artists/{id}`,
+		TOP_ALBUMS: `/artists/{id}/albums/top`,
+		NEW_RELEASES: `/artists/{id}/albums/new`,
 	}
 }

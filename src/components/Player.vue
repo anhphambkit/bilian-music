@@ -1,91 +1,134 @@
 <template>
 	<div class="player">
-		<div class="player__over-view-wrapper" v-if="playingTrack">
-			<div class="player__image-wrapper">
-				<b-img-lazy
-					:src="
-						$_imageServerMixin_getUrlByType(
-							IMAGE_SUPPORT_TYPES.TRACK,
-							playingTrack.albumId,
-							'300x300'
-						)
-					"
-					alt=""
-					class="player__img"
-				/>
-			</div>
-			<div class="player__info-wrapper">
-				<div
-					class="player__info name"
-					v-b-tooltip.hover
-					:title="playingTrack.name"
-				>
-					{{ playingTrack.name }}
+		<b-skeleton-wrapper
+			:loading="skeletonMixin_loading"
+			class="skeleton-loading player-loading"
+		>
+			<template #loading>
+				<div class="skeleton-loading__partial player__over-view-wrapper">
+					<b-skeleton-img></b-skeleton-img>
+					<b-skeleton width="80%" class="mt-2 mb-2"></b-skeleton>
+					<b-skeleton width="90%" class="mt-2 mb-2"></b-skeleton>
 				</div>
-				<div class="player__info artist">
-					{{ playingTrack.artistName }}
+				<div class="skeleton-loading__partial player__controls">
+					<b-skeleton width="98%" class="mt-2 mb-4"></b-skeleton>
+					<b-skeleton width="85%" class="mb-2"></b-skeleton>
+					<b-skeleton width="55%" class="mt-2 mb-2"></b-skeleton>
+					<b-skeleton width="70%" class="mt-2 mb-2"></b-skeleton>
 				</div>
-			</div>
-			<transition name="slideInUp">
-				<div class="player__list-wrapper" v-show="showPlaylist">
-					<div class="player__list">
+			</template>
+			<slot>
+				<div class="player__over-view-wrapper" v-if="playingTrack">
+					<div class="player__image-wrapper">
+						<b-img-lazy
+							:src="
+								$_imageServerMixin_getUrlByType(
+									IMAGE_SUPPORT_TYPES.TRACK,
+									playingTrack.albumId,
+									'300x300'
+								)
+							"
+							alt=""
+							class="player__img"
+						/>
+					</div>
+					<div class="player__info-wrapper">
 						<div
-							class="player__track"
-							:class="{ playing: index === playingIndex }"
-							v-for="(track, index) in playlists"
-							:key="index"
-                            @click="selectTrack(index)"
+							class="player__info name"
+							v-b-tooltip.hover
+							:title="playingTrack.name"
 						>
-							<div class="player__track--order">
-								{{ index + 1 }}.
-							</div>
-							<div class="player__track__info">
+							{{ playingTrack.name }}
+						</div>
+						<router-link
+							:to="`/artist/${playingTrack.artistId}`"
+							class="player__info artist"
+						>
+							{{ playingTrack.artistName }}
+						</router-link>
+					</div>
+					<transition name="slideInUp">
+						<div class="player__list-wrapper" v-show="showPlaylist">
+							<div class="player__list">
 								<div
-									class="player__track--name"
+									class="player__track"
+									:class="{ playing: index === playingIndex }"
+									v-for="(track, index) in playlists"
+									:key="index"
+									@click="selectTrack(index)"
 								>
-									{{ track.name }}
-								</div>
-								<div class="player__track--duration">
-									{{
-										formatStreamTime(track.playbackSeconds)
-									}}
+									<div class="player__track--order">
+										{{ index + 1 }}.
+									</div>
+									<div class="player__track__info">
+										<div class="player__track--name">
+											{{ track.name }}
+										</div>
+										<div class="player__track--duration">
+											{{
+												formatStreamTime(
+													track.playbackSeconds
+												)
+											}}
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
+					</transition>
+				</div>
+				<div class="player__actions">
+					<div
+						class="player__action previous"
+						@click="playPreviousTrack"
+					>
+						<b-icon-skip-start-fill
+							class="player__action--icon previous"
+							:class="{ disabled: !playingIndex }"
+						></b-icon-skip-start-fill>
+					</div>
+					<div
+						class="player__action list"
+						@click="toggleShowPlaylist"
+					>
+						<b-icon-music-note-list
+							class="player__action--icon list"
+							:class="{ active: showPlaylist }"
+						></b-icon-music-note-list>
+					</div>
+					<div class="player__action next" @click="playNextTrack">
+						<b-icon-skip-end-fill
+							class="player__action--icon previous"
+							:class="{
+								disabled: playingIndex === playlists.length - 1,
+							}"
+						></b-icon-skip-end-fill>
 					</div>
 				</div>
-			</transition>
-		</div>
-		<div class="player__actions">
-			<div class="player__action previous" @click="playPreviousTrack">
-                <b-icon-skip-start-fill class="player__action--icon previous" :class="{disabled: !playingIndex}"></b-icon-skip-start-fill>
-			</div>
-			<div class="player__action list" @click="toggleShowPlaylist">
-				<b-icon-music-note-list class="player__action--icon list" :class="{active: showPlaylist}"></b-icon-music-note-list>
-			</div>
-			<div class="player__action next" @click="playNextTrack">
-				<b-icon-skip-end-fill class="player__action--icon previous" :class="{disabled: playingIndex === playlists.length - 1}"></b-icon-skip-end-fill>
-			</div>
-		</div>
-		<div class="player__controls">
-			<audio
-				controls
-				class="player__audio-control w-100"
-				ref="audioPlayer"
-				v-if="playingTrack"
-				:key="playingIndex"
-                autoplay
-                @ended="playNextTrack"
-			>
-				<source :src="playingTrack.previewURL" type="audio/mpeg" />
-				Your browser does not support the audio element.
-			</audio>
-		</div>
+				<div class="player__controls">
+					<audio
+						controls
+						class="player__audio-control w-100"
+						ref="audioPlayer"
+						v-if="playingTrack"
+						:key="playingIndex"
+						autoplay
+						@ended="playNextTrack"
+					>
+						<source
+							:src="playingTrack.previewURL"
+							type="audio/mpeg"
+						/>
+						Your browser does not support the audio element.
+					</audio>
+				</div>
+			</slot>
+		</b-skeleton-wrapper>
 	</div>
 </template>
 <script>
 import ImageServerMixin from "@/mixins/ImageServerMixin";
-
+import SkeletonMixin from "@/mixins/SkeletonMixin";
 export default {
 	name: "Player",
 	props: {
@@ -93,7 +136,7 @@ export default {
 			type: Array,
 		},
 	},
-	mixins: [ImageServerMixin],
+	mixins: [SkeletonMixin, ImageServerMixin],
 	computed: {
 		playingTrack() {
 			return this.playlists[this.playingIndex];
@@ -156,12 +199,12 @@ export default {
 			return ("0" + num).slice(-2);
 		},
 
-        /**
-         * Play the selected track
-        */
-        selectTrack(index) {
-            this.playingIndex = index
-        },
+		/**
+		 * Play the selected track
+		 */
+		selectTrack(index) {
+			this.playingIndex = index;
+		},
 	},
 };
 </script>
@@ -298,17 +341,17 @@ export default {
 	&__action {
 		cursor: pointer;
 		&--icon {
-            font-size: 30px;
-            color: #d6d0d8;
+			font-size: 30px;
+			color: #d6d0d8;
 			&:hover {
 				transform: scale(1.1);
 			}
-            &.active {
-                color: #e87513;
-            }
-            &.disabled {
-                opacity: 0.3;
-            }
+			&.active {
+				color: #e87513;
+			}
+			&.disabled {
+				opacity: 0.3;
+			}
 		}
 	}
 }
