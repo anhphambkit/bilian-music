@@ -49,7 +49,7 @@
 							<div class="top-album-card__album--img-wrapper">
 								<b-img
 									rounded
-									:src="$_imageMixins_loadImageSrc('https://iframe-stg-clients.belive.sg/show/cover_image/')"
+									:src="$_imageMixins_loadImageSrc(albumImage)"
 									@error="$_imageMixins_loadImageError"
 									:alt="albumName"
 									class="top-album-card__album--img"
@@ -70,6 +70,7 @@
 							<router-link
 								:to="`/artist/${artistId}`"
 								class="top-album-card__link author-detail"
+								v-if="artistId && artistId !== 'art.0'"
 							>
 								<div
 									class="
@@ -92,6 +93,31 @@
 									{{ artistName }}
 								</div>
 							</router-link>
+							<div
+								class="top-album-card__link author-detail"
+								v-else
+							>
+								<div
+									class="
+										top-album-card__author-info--img-wrapper
+									"
+								>
+									<b-img
+										rounded="circle"
+										@error="$_imageMixins_loadImageError"
+										:src="$_imageMixins_loadImageSrc(artistImage)"
+										:alt="artistName"
+										class="top-album-card__author-info--img"
+									/>
+								</div>
+								<div
+									class="top-album-card__author-info--name"
+									v-b-tooltip.hover
+									:title="artistName"
+								>
+									{{ artistName }}
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -101,6 +127,7 @@
 </template>
 <script>
 import SkeletonMixin from "@/mixins/SkeletonMixin";
+import { INVALID_ID } from"@/configs/Settings"
 export default {
 	name: "TopAlbumCard",
 	mixins: [SkeletonMixin],
@@ -145,6 +172,11 @@ export default {
 			type: String,
 			required: true,
 		},
+	},
+	data() {
+		return {
+			INVALID_ID
+		}
 	}
 };
 </script>

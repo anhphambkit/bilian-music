@@ -3,7 +3,7 @@
 		<b-container fluid class="page page__home home">
 			<b-container class="p-0">
 				<div class="page__filter-wrapper">
-					<h1 class="page__title">TOP 20 ALBUMS / </h1>
+					<h1 class="page__title">TOP 20 ALBUMS /</h1>
 					<b-form-select
 						v-model="filterRange"
 						:options="ranges"
@@ -13,8 +13,8 @@
 					></b-form-select>
 				</div>
 				<b-row>
-					<b-col
-						class="col-lg-4 col-md-6 col-sm-12 mb-4"
+					<div
+						class="col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-4"
 						v-for="(album, index) in top3Albums"
 						:key="index"
 					>
@@ -47,11 +47,11 @@
 							:artistName="album.artistName"
 							:loading="loading"
 						/>
-					</b-col>
+					</div>
 				</b-row>
 				<b-row>
-					<b-col
-						class="col-lg-12 col-md-12 col-sm-12 mb-2"
+					<div
+						class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mb-2"
 						v-for="(album, index) in topRemainingAlbums"
 						:key="index"
 					>
@@ -83,14 +83,14 @@
 							:artistName="album.artistName"
 							:artistId="album.contributingArtists.primaryArtist"
 						/>
-					</b-col>
+					</div>
 				</b-row>
 			</b-container>
 		</b-container>
 	</b-overlay>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 import ImageServerMixin from "@/mixins/ImageServerMixin";
 import MomentMixins from "@/mixins/MomentMixins";
 import TopAlbumCard from "@/components/TopAlbumCard";
@@ -106,20 +106,20 @@ export default {
 		return {
 			limit: 20,
 			loading: true,
-			filterRange: 'day',
+			filterRange: "day",
 			ranges: [
-				{ value: 'day', name: 'Day' },
-				{ value: 'week', name: 'Week' },
-				{ value: 'month', name: 'Month' },
-				{ value: 'year', name: 'Year' },
-				{ value: 'life', name: 'Life' },
-			]
+				{ value: "day", name: "Day" },
+				{ value: "week", name: "Week" },
+				{ value: "month", name: "Month" },
+				{ value: "year", name: "Year" },
+				{ value: "life", name: "Life" },
+			],
 		};
 	},
 	watch: {
 		async filterRange() {
 			await this.fetchTopAlbum();
-		}
+		},
 	},
 	computed: {
 		...mapGetters(["topAlbums"]),
@@ -135,16 +135,16 @@ export default {
 	},
 	methods: {
 		...mapActions({
-			getTopAlbums: "getTopAlbums"
+			getTopAlbums: "getTopAlbums",
 		}),
 		async fetchTopAlbum() {
-			this.loading = true
+			this.loading = true;
 			await this.getTopAlbums({
 				limit: this.limit,
-				offset: 0, 
-				filterRange: this.filterRange
-			})
-			this.loading = false
+				offset: 0,
+				filterRange: this.filterRange,
+			});
+			this.loading = false;
 		},
 	},
 };
@@ -163,6 +163,8 @@ export default {
 	&__select {
 		width: 100%;
 		max-width: 200px;
+		background-color: #9a9aa0;
+		border: none;
 	}
 }
 </style>

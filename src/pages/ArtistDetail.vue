@@ -153,6 +153,7 @@ export default {
 		await this.fetchArtistDetail();
 		await this.fetchTopAlbums();
 		await this.fetchNewReleases();
+		this.loading = false;
 	},
 	methods: {
 		...mapActions({
@@ -166,7 +167,6 @@ export default {
 		 * fetch artist detail by artistId
 		 */
 		async fetchArtistDetail() {
-			this.loading = true;
 			await this.getArtistDetail(this.id);
 			await this.fetchGenreDetail();
 		},
@@ -175,29 +175,25 @@ export default {
 		 * fetch top albums of artist by artistId
 		 */
 		async fetchTopAlbums() {
-			this.loading = true;
 			await this.getTopAlbums(this.id);
-			this.loading = false;
 		},
 
 		/**
 		 * Fetch new releases of artist by artistId
 		 */
 		async fetchNewReleases() {
-			this.loading = true;
 			await this.getNewAlbums(this.id);
-			this.loading = false;
 		},
 
 		/**
 		 * get detail genres of artist
 		 */
 		async fetchGenreDetail() {
-			this.loading = true;
-			await this.getArtistGenres(
-				this.artistDetail.links.genres.ids.join(",")
-			);
-			this.loading = false;
+			if (this.artistDetail.links.genres) {
+				await this.getArtistGenres(
+					this.artistDetail.links.genres.ids.join(",")
+				);
+			}
 		},
 	},
 };

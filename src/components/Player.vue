@@ -42,9 +42,16 @@
 						<router-link
 							:to="`/artist/${playingTrack.artistId}`"
 							class="player__info artist"
+							v-if="playingTrack.artistId && playingTrack.artistId !== INVALID_ID"
 						>
 							{{ playingTrack.artistName }}
 						</router-link>
+						<div
+							class="player__info artist"
+							v-else
+						>
+							{{ playingTrack.artistName }}
+						</div>
 					</div>
 					<transition name="slideInUp">
 						<div class="player__list-wrapper" v-show="showPlaylist">
@@ -60,8 +67,15 @@
 										{{ index + 1 }}.
 									</div>
 									<div class="player__track__info">
-										<div class="player__track--name">
-											{{ track.name }}
+										<div class="player__track__name-wrapper">
+											<div class="player__track--name">
+												{{ track.name }}
+											</div>
+											<div
+												class="player__track--artist"
+											>
+												{{ track.artistName }}
+											</div>
 										</div>
 										<div class="player__track--duration">
 											{{
@@ -129,6 +143,7 @@
 <script>
 import ImageServerMixin from "@/mixins/ImageServerMixin";
 import SkeletonMixin from "@/mixins/SkeletonMixin";
+import { INVALID_ID } from"@/configs/Settings"
 export default {
 	name: "Player",
 	props: {
@@ -146,6 +161,7 @@ export default {
 		return {
 			playingIndex: 0,
 			showPlaylist: false,
+			INVALID_ID
 		};
 	},
 	methods: {
@@ -249,7 +265,6 @@ export default {
 	}
 	&__track {
 		display: flex;
-		align-items: center;
 		justify-content: space-between;
 		cursor: pointer;
 		padding: 5px 20px;
@@ -267,12 +282,11 @@ export default {
 			}
 		}
 		&--order {
-			margin-right: 5px;
+			margin-right: 10px;
 			color: #9d9da4;
 		}
 		&__info {
 			display: flex;
-			align-items: center;
 			justify-content: space-between;
 			width: 100%;
 		}
@@ -288,6 +302,11 @@ export default {
 			text-overflow: ellipsis;
 			white-space: normal;
 			word-break: break-word;
+		}
+		&--artist {
+			font-size: 12px;
+			font-style: italic;
+			color: #a2a2a8;
 		}
 	}
 	&__over-view-wrapper {

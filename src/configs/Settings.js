@@ -23,3 +23,5 @@ export const VARIANTS = [
     "light",
     "dark",
 ]
+
+export const INVALID_ID = "art.0"

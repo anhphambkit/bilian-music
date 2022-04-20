@@ -48,6 +48,7 @@
 							<router-link
 								:to="`/artist/${artistId}`"
 								class="album-card__info--value author-detail"
+								v-if="artistId && artistId !== INVALID_ID"
 							>
 								<div class="author__image-wrapper">
 									<b-img
@@ -66,6 +67,27 @@
 									{{ artistName }}
 								</div>
 							</router-link>
+							<div
+								class="album-card__info--value author-detail"
+								v-else
+							>
+								<div class="author__image-wrapper">
+									<b-img
+										rounded="circle"
+										class="author__img"
+										:alt="artistName"
+										@error="$_imageMixins_loadImageError"
+                            			:src="$_imageMixins_loadImageSrc(artistImage)"
+									/>
+								</div>
+								<div
+									class="author__name"
+									v-b-tooltip.hover
+									:title="artistName"
+								>
+									{{ artistName }}
+								</div>
+							</div>
 							<div class="album-card__info--name">Artist</div>
 						</div>
 						<div class="album-card__info total-tracks">
@@ -98,6 +120,7 @@
 </template>
 <script>
 import SkeletonMixin from "@/mixins/SkeletonMixin";
+import { INVALID_ID } from"@/configs/Settings"
 export default {
 	name: "AlbumCard",
 	mixins: [SkeletonMixin],
@@ -143,6 +166,11 @@ export default {
 			required: true,
 		},
 	},
+	data() {
+		return {
+			INVALID_ID
+		}
+	}
 };
 </script>
 <style lang="scss" scoped>

@@ -82,7 +82,17 @@ const actions = {
 	 async getGenreDetail({ commit }, ids) {
 		let response = await RepositoryFactory.genre().detail(ids);
 		commit("UPDATE_GENRES", response.genres);
-	}
+	},
+	 
+	 /**
+	  * Reset data album info (detail, playlist, genre)
+	  * @param {*} param0 
+	  */
+	resetAlbumInfo({ commit }) {
+		commit("UPDATE_ALBUM_DETAIL", null);
+		commit("UPDATE_ALBUM_TRACKS", []);
+		commit("UPDATE_GENRES", []);
+	 }
 };
 
 export default {

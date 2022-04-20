@@ -7,8 +7,7 @@
 					- Album Detail
 				</div>
 				<b-row class="album__wrapper" v-if="albumDetail">
-					<b-col
-						cols="12"
+					<div
 						class="
 							album__player-wrapper
 							col-lg-5 col-md-12 col-sm-12
@@ -16,9 +15,8 @@
 						"
 					>
 						<Player :playlists="albumTracks" />
-					</b-col>
-					<b-col
-						cols="12"
+					</div>
+					<div
 						class="album__info-wrapper col-lg-7 col-md-12 col-sm-12"
 					>
 						<div class="album__content">
@@ -48,9 +46,16 @@
 								<router-link
 									:to="`/artist/${albumDetail.contributingArtists.primaryArtist}`"
 									class="album__info--name artist"
+									v-if="albumDetail.contributingArtists.primaryArtist && albumDetail.contributingArtists.primaryArtist !== INVALID_ID"
 								>
 									{{ albumDetail.artistName }}
 								</router-link>
+								<div
+									class="album__info--name artist"
+									v-else
+								>
+									{{ albumDetail.artistName }}
+								</div>
 							</div>
 							<div class="album__info">
 								<div class="album__info--key">Genres:</div>
@@ -92,7 +97,7 @@
 								</div>
 							</div>
 						</div>
-					</b-col>
+					</div>
 				</b-row>
 			</b-container>
 		</b-container>
@@ -104,7 +109,7 @@ import { mapActions, mapGetters } from 'vuex';
 import ImageServerMixin from "@/mixins/ImageServerMixin";
 import MomentMixins from "@/mixins/MomentMixins";
 import Player from "@/components/Player";
-import { VARIANTS } from"@/configs/Settings"
+import { VARIANTS, INVALID_ID } from"@/configs/Settings"
 export default {
 	name: "AlbumDetail",
 	components: {
@@ -116,27 +121,32 @@ export default {
 			id: this.$route.params.id,
 			VARIANTS,
 			loading: true,
+			INVALID_ID
 		};
 	},
 	async mounted() {
 		await this.fetchAlbumDetail();
 		await this.fetchTracksOfAlbum();
+		this.loading = false;
 	},
 	computed: {
 		...mapGetters(["albumDetail", "albumTracks", "albumGenres"])
+	},
+	beforeDestroy() {
+		this.resetAlbumInfo()
 	},
 	methods: {
 		...mapActions({
 			getAlbumDetail: "getAlbumDetail",
 			getTracksOfAlbum: "getTracksOfAlbum",
-			getGenreDetail: "getGenreDetail"
+			getGenreDetail: "getGenreDetail",
+			resetAlbumInfo: "resetAlbumInfo"
 		}),
 
 		/**
 		 * fetch album detail by albumId
 		 */
 		async fetchAlbumDetail() {
-			this.loading = true;
 			await this.getAlbumDetail(this.id);
 			await this.fetchGenreDetail();
 		},
@@ -145,20 +155,16 @@ export default {
 		 * fetch tracks by albumId
 		 */
 		async fetchTracksOfAlbum() {
-			this.loading = true;
 			await this.getTracksOfAlbum(this.id);
-			this.loading = false;
 		},
 
 		/**
 		 * get detail genres of album
 		 */
 		async fetchGenreDetail() {
-			this.loading = true;
 			await this.getGenreDetail(
 				this.albumDetail.links.genres.ids.join(",")
 			);
-			this.loading = false;
 		},
 	},
 };
