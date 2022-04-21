@@ -51,7 +51,7 @@
 							<div class="player__list">
 								<div
 									class="player__track"
-									:class="`${'playing' ? index === playingIndex : ''} track-${index}`"
+									:class="`${index === playingIndex ? 'playing' : ''} track-${index}`"
 									v-for="(track, index) in playlists"
 									:key="index"
 									@click="selectTrack(index)"
