@@ -4,7 +4,7 @@ const state = {
 	artistDetail: null,
     artistTopAlbums: [],
     newAlbums: [],
-    artistGenres: null,
+    artistGenres: [],
 };
 
 const getters = {
@@ -39,14 +39,6 @@ const mutations = {
 
 const actions = {
 	/**
-	 * Update top albums
-	 * @param {*} artistTopAlbums 
-	 */
-	updateartistTopAlbums: ({ commit }, artistTopAlbums) => {
-		commit("UPDATE_TOP_ALBUMS", artistTopAlbums);
-	},
-
-	/**
 	 * Get top albums
 	 * @param {*} id 
 	 */
@@ -80,7 +72,18 @@ const actions = {
 	 async getArtistGenres({ commit }, ids) {
 		let response = await RepositoryFactory.genre().detail(ids);
 		commit("UPDATE_ARTIST_GENRES", response.genres);
-	}
+	},
+	 
+	/**
+	  * Reset data artist info (detail, top albums, new albums, genres)
+	  * @param {*} param0 
+	  */
+	resetArtistInfo({ commit }) {
+		commit("UPDATE_ARTIST_DETAIL", null);
+		commit("UPDATE_TOP_ALBUMS", []);
+		commit("UPDATE_NEW_ALBUMS", []);
+		commit("UPDATE_ARTIST_GENRES", []);
+	 }
 };
 
 export default {

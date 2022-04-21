@@ -4,7 +4,7 @@ const state = {
 	topAlbums: [],
 	albumDetail: null,
 	albumTracks: [],
-	albumGenres: null,
+	albumGenres: [],
 };
 
 const getters = {

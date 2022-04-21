@@ -149,6 +149,9 @@ export default {
 	computed: {
 		...mapGetters(["artistDetail", "artistTopAlbums", "newAlbums", "artistGenres"])
 	},
+	beforeDestroy() {
+		this.resetArtistInfo()
+	},
 	async mounted() {
 		await this.fetchArtistDetail();
 		await this.fetchTopAlbums();
@@ -161,6 +164,7 @@ export default {
 			getArtistDetail: "getArtistDetail",
 			getNewAlbums: "getNewAlbums",
 			getArtistGenres: "getArtistGenres",
+			resetArtistInfo: "resetArtistInfo"
 		}),
 		
 		/**
