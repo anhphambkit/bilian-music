@@ -39,16 +39,9 @@
 						>
 							{{ playingTrack.name }}
 						</div>
-						<router-link
-							:to="`/artist/${playingTrack.artistId}`"
-							class="player__info artist"
-							v-if="playingTrack.artistId && playingTrack.artistId !== INVALID_ID"
-						>
-							{{ playingTrack.artistName }}
-						</router-link>
 						<div
+							@click="$_navigatorMixin_goToArtistDetail(playingTrack.artistId)"
 							class="player__info artist"
-							v-else
 						>
 							{{ playingTrack.artistName }}
 						</div>
@@ -58,7 +51,7 @@
 							<div class="player__list">
 								<div
 									class="player__track"
-									:class="{ playing: index === playingIndex }"
+									:class="`${'playing' ? index === playingIndex : ''} track-${index}`"
 									v-for="(track, index) in playlists"
 									:key="index"
 									@click="selectTrack(index)"
@@ -143,7 +136,7 @@
 <script>
 import ImageServerMixin from "@/mixins/ImageServerMixin";
 import SkeletonMixin from "@/mixins/SkeletonMixin";
-import { INVALID_ID } from"@/configs/Settings"
+import NavigatorMixins from "@/mixins/NavigatorMixins";
 export default {
 	name: "Player",
 	props: {
@@ -151,7 +144,7 @@ export default {
 			type: Array,
 		},
 	},
-	mixins: [SkeletonMixin, ImageServerMixin],
+	mixins: [SkeletonMixin, ImageServerMixin, NavigatorMixins],
 	computed: {
 		playingTrack() {
 			return this.playlists[this.playingIndex];
@@ -161,7 +154,6 @@ export default {
 		return {
 			playingIndex: 0,
 			showPlaylist: false,
-			INVALID_ID
 		};
 	},
 	methods: {
@@ -349,6 +341,7 @@ export default {
 		&.artist {
 			color: #9b9ba2;
 			font-style: italic;
+			cursor: pointer;
 		}
 	}
 	&__actions {

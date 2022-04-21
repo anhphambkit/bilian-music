@@ -42,11 +42,10 @@
 				</div>
 				<div class="top-album-card__main">
 					<div class="top-album-card__album">
-						<router-link
-							:to="`/album/${albumId}`"
+						<div
 							class="top-album-card__link album-detail"
 						>
-							<div class="top-album-card__album--img-wrapper">
+							<div class="top-album-card__album--img-wrapper" @click="$_navigatorMixin_goToAlbumDetail(albumId)">
 								<b-img
 									rounded
 									:src="$_imageMixins_loadImageSrc(albumImage)"
@@ -57,45 +56,20 @@
 							</div>
 							<div
 								class="top-album-card__album--name"
+								@click="$_navigatorMixin_goToAlbumDetail(albumId)"
 								v-b-tooltip.hover
 								:title="albumName"
 							>
 								{{ albumName }}
 							</div>
-						</router-link>
+						</div>
 					</div>
 					<div class="top-album-card__author">
 						<div class="top-album-card__author-title">Artist</div>
 						<div class="top-album-card__author-info">
-							<router-link
-								:to="`/artist/${artistId}`"
-								class="top-album-card__link author-detail"
-								v-if="artistId && artistId !== 'art.0'"
-							>
-								<div
-									class="
-										top-album-card__author-info--img-wrapper
-									"
-								>
-									<b-img
-										rounded="circle"
-										@error="$_imageMixins_loadImageError"
-										:src="$_imageMixins_loadImageSrc(artistImage)"
-										:alt="artistName"
-										class="top-album-card__author-info--img"
-									/>
-								</div>
-								<div
-									class="top-album-card__author-info--name"
-									v-b-tooltip.hover
-									:title="artistName"
-								>
-									{{ artistName }}
-								</div>
-							</router-link>
 							<div
+								@click="$_navigatorMixin_goToArtistDetail(artistId)"
 								class="top-album-card__link author-detail"
-								v-else
 							>
 								<div
 									class="
@@ -127,10 +101,10 @@
 </template>
 <script>
 import SkeletonMixin from "@/mixins/SkeletonMixin";
-import { INVALID_ID } from"@/configs/Settings"
+import NavigatorMixins from "@/mixins/NavigatorMixins";
 export default {
 	name: "TopAlbumCard",
-	mixins: [SkeletonMixin],
+	mixins: [SkeletonMixin, NavigatorMixins],
 	props: {
 		order: {
 			type: Number,
@@ -174,10 +148,9 @@ export default {
 		},
 	},
 	data() {
-		return {
-			INVALID_ID
-		}
-	}
+		return {}
+	},
+	methods: {},
 };
 </script>
 <style lang="scss" scoped>

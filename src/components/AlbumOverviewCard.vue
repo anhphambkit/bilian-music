@@ -14,8 +14,8 @@
 				</div>
 			</template>
 			<slot>
-				<router-link
-					:to="`/album/${albumId}`"
+				<div
+					@click="$_navigatorMixin_goToAlbumDetail(albumId)"
 					class="album-overview-card__top"
 				>
 					<b-img
@@ -35,27 +35,27 @@
 							{{ discCount }}
 						</div>
 					</div>
-				</router-link>
-				<router-link
-					:to="`/album/${albumId}`"
+				</div>
+				<div
 					class="album-overview-card__bot"
 				>
-					<div class="album-overview-card__info name">
+					<div class="album-overview-card__info name" @click="$_navigatorMixin_goToAlbumDetail(albumId)">
 						{{ albumName }}
 					</div>
 					<div class="album-overview-card__info date-released">
 						{{ released }}
 					</div>
-				</router-link>
+				</div>
 			</slot>
 		</b-skeleton-wrapper>
 	</div>
 </template>
 <script>
 import SkeletonMixin from "@/mixins/SkeletonMixin";
+import NavigatorMixins from "@/mixins/NavigatorMixins";
 export default {
 	name: "AlbumOverviewCard",
-	mixins: [SkeletonMixin],
+	mixins: [SkeletonMixin, NavigatorMixins],
 	props: {
 		discCount: {
 			type: Number,
@@ -99,6 +99,7 @@ export default {
 	&__image {
 		width: 100%;
 		height: auto;
+		cursor: pointer;
 	}
 	&__sub-wrapper {
 		position: absolute;
@@ -125,6 +126,9 @@ export default {
 		&.date-released {
 			color: #9c9ca2;
 			font-size: 12px;
+		}
+		&.name {
+			cursor: pointer;
 		}
 	}
 }

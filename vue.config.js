@@ -6,20 +6,6 @@ module.exports = {
 			.use("url-loader")
 			.loader("url-loader")
 			.tap((options) => Object.assign(options, { limit: 10240 }));
-		const svgRule = config.module.rule("svg");
-		svgRule.uses.clear();
-		svgRule
-			.oneOf("inline")
-			.resourceQuery(/inline/)
-			.use("babel-loader")
-			.loader("babel-loader")
-			.end()
-			.oneOf("external")
-			.use("file-loader")
-			.loader("file-loader")
-			.options({
-				name: "assets/[name].[hash:8].[ext]"
-			});
 	},
 	css: {
 		loaderOptions: {

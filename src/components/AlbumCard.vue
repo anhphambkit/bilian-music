@@ -21,11 +21,10 @@
 				</div>
 				<div class="album-card__info-wrapper">
 					<div class="album-card__main">
-						<router-link
-							:to="`/album/${albumId}`"
+						<div
 							class="album-card__info album"
 						>
-							<div class="album__image-wrapper">
+							<div class="album__image-wrapper" @click="$_navigatorMixin_goToAlbumDetail(albumId)">
 								<b-img
 									rounded
 									class="album__img"
@@ -36,40 +35,19 @@
 							</div>
 							<div
 								class="album__name"
+								@click="$_navigatorMixin_goToAlbumDetail(albumId)"
 								v-b-tooltip.hover
 								:title="albumName"
 							>
 								{{ albumName }}
 							</div>
-						</router-link>
+						</div>
 					</div>
 					<div class="album-card__sub">
 						<div class="album-card__info author">
-							<router-link
-								:to="`/artist/${artistId}`"
-								class="album-card__info--value author-detail"
-								v-if="artistId && artistId !== INVALID_ID"
-							>
-								<div class="author__image-wrapper">
-									<b-img
-										rounded="circle"
-										class="author__img"
-										:alt="artistName"
-										@error="$_imageMixins_loadImageError"
-                            			:src="$_imageMixins_loadImageSrc(artistImage)"
-									/>
-								</div>
-								<div
-									class="author__name"
-									v-b-tooltip.hover
-									:title="artistName"
-								>
-									{{ artistName }}
-								</div>
-							</router-link>
 							<div
+								@click="$_navigatorMixin_goToArtistDetail(artistId)"
 								class="album-card__info--value author-detail"
-								v-else
 							>
 								<div class="author__image-wrapper">
 									<b-img
@@ -120,10 +98,10 @@
 </template>
 <script>
 import SkeletonMixin from "@/mixins/SkeletonMixin";
-import { INVALID_ID } from"@/configs/Settings"
+import NavigatorMixins from "@/mixins/NavigatorMixins";
 export default {
 	name: "AlbumCard",
-	mixins: [SkeletonMixin],
+	mixins: [SkeletonMixin, NavigatorMixins],
 	props: {
 		order: {
 			type: Number,
@@ -167,9 +145,7 @@ export default {
 		},
 	},
 	data() {
-		return {
-			INVALID_ID
-		}
+		return {}
 	}
 };
 </script>
