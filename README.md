@@ -35,7 +35,7 @@ Local server:
 ## Demo
 <div align="center">
     <h4>Home page</h4>
-    <img src="https://github.com/anhphambkit/bilian-music---Cubicasa-test/blob/master/docs/home.png" width=70% />
+    ![alt text](https://github.com/anhphambkit/bilian-music---Cubicasa-test/blob/master/docs/home.png?raw=true)
 </div>
 <div align="center">
     <h4>Album detail page</h4>
