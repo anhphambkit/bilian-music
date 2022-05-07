@@ -35,19 +35,19 @@ Local server:
 ## Demo
 <div align="center">
     <h4>Home page</h4>
-    ![alt text](https://github.com/anhphambkit/bilian-music---Cubicasa-test/blob/master/docs/home.png?raw=true)
+    <img width=70% alt="home" src="https://github.com/anhphambkit/bilian-music---Cubicasa-test/blob/main/docs/home.png">
 </div>
 <div align="center">
     <h4>Album detail page</h4>
-    <img src="https://github.com/anhphambkit/bilian-music---Cubicasa-test/blob/master/docs/player.png" width=70% />
+    <img src="https://github.com/anhphambkit/bilian-music---Cubicasa-test/blob/main/docs/player.png" width=70% />
 </div>
 <div align="center">
     <h4>Artist detail page</h4>
-    <img src="https://github.com/anhphambkit/bilian-music---Cubicasa-test/blob/master/docs/artist.png" width=70% />
+    <img src="https://github.com/anhphambkit/bilian-music---Cubicasa-test/blob/main/docs/artist.png" width=70% />
 </div>
 <div align="center">
     <h4>Demo video</h4>
-    <img src="https://github.com/anhphambkit/bilian-music---Cubicasa-test/blob/master/docs/demo.gif" width=70% />
+    <img src="https://github.com/anhphambkit/bilian-music---Cubicasa-test/blob/main/docs/demo.gif" width=70% />
 </div>
 
 ## Special Directories
